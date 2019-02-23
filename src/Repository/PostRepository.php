@@ -20,16 +20,16 @@ class PostRepository extends ServiceEntityRepository
         parent::__construct($registry, Post::class);
     }
 
-	public function findAllByAuthor(UserInterface $user){
-		return $this->createQueryBuilder('u')
-			->andWhere('u.user = :author_id')
-			->setParameter('author_id', $user->getId())
-			->getQuery()
-			->getResult();
-	}
+    public function findAllByAuthor(UserInterface $user)
+    {
+        return $this->createQueryBuilder('u')
+            ->andWhere('u.user = :author_id')
+            ->setParameter('author_id', $user->getId())
+            ->getQuery()
+            ->getResult();
+    }
 
-
-	// /**
+    // /**
     //  * @return Post[] Returns an array of Post objects
     //  */
     /*

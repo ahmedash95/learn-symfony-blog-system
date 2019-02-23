@@ -16,12 +16,12 @@ class RegistrationFormType extends AbstractType
     {
         $builder
             ->add('username')
-            ->add('email',RepeatedType::class, array(
-				'type' => EmailType::class,
-				'first_options'  => array('label' => 'Email'),
-				'second_options' => array('label' => 'Repeat Email'),
-			))
-			->add('password',PasswordType::class)
+            ->add('email', RepeatedType::class, array(
+                'type' => EmailType::class,
+                'first_options' => array('label' => 'Email'),
+                'second_options' => array('label' => 'Repeat Email'),
+            ))
+            ->add('password', PasswordType::class)
         ;
     }
 

@@ -26,37 +26,37 @@ class SecurityController extends AbstractController
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 
-	/**
-	 * @Route("/register", name="user_registration")
-	 */
-	public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder)
-	{
-		$user = new User();
-		$form = $this->createForm(RegistrationFormType::class, $user);
+    /**
+     * @Route("/register", name="user_registration")
+     */
+    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    {
+        $user = new User();
+        $form = $this->createForm(RegistrationFormType::class, $user);
 
-		$form->handleRequest($request);
-		if ($form->isSubmitted() && $form->isValid()) {
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $password = $passwordEncoder->encodePassword($user, $user->getPassword());
+            $user->setPassword($password);
 
-			$password = $passwordEncoder->encodePassword($user, $user->getPassword());
-			$user->setPassword($password);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($user);
+            $entityManager->flush();
 
-			$entityManager = $this->getDoctrine()->getManager();
-			$entityManager->persist($user);
-			$entityManager->flush();
+            return $this->redirectToRoute('posts');
+        }
 
-			return $this->redirectToRoute('posts');
-		}
+        return $this->render(
+            'security/register.html.twig',
+            array('form' => $form->createView())
+        );
+    }
 
-		return $this->render(
-			'security/register.html.twig',
-			array('form' => $form->createView())
-		);
-	}
-
-	/**
-	 * @Route("/logout")
-	 */
-	public function logout(){
-		throw new Excpetion("Should not call logout directly!");
-	}
+    /**
+     * @Route("/logout")
+     */
+    public function logout()
+    {
+        throw new Excpetion('Should not call logout directly!');
+    }
 }
