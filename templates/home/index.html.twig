@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello HomeController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>The best blog system ever :P</h1>
+    {% if app.user %}
+        Welcome {{ app.user.username }} | <a href="{{ logout_path('main') }}">Logout</a>
+    {% else %}
+        <a href="{{ path('app_login') }}">Login</a>
+        |
+        <a href="{{ path('user_registration') }}">Register</a>
+    {% endif %}
+    <ul>
+        {% for post in posts %}
+        <li>
+            <a href="{{ path('home_post',{slug : post.id}) }}">{{ post.title }}</a>
+            {% if app.user and app.user.id == post.user.id %}
+                <a href="{{ path('edit_post',{id: post.id}) }}">Edit</a>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <a href="{{ path('home') }}">HOME</a>
+    <h1>{{ post.title }}</h1>
+    <p>By: <a href="{{ path('posts_user',{id: post.user.id}) }}">{{ post.user.username }}</a></p>
+    <p>{{ post.content }}</p>
+{% endblock %}
+
+{% block title %}
+    {{ post.title }}
+{% endblock %}
+

@@ -1,3 +1,48 @@
 #index:
 #    path: /
 #    controller: App\Controller\DefaultController::index
+
+posts:
+  path: /posts
+  controller: App\Controller\PostsController::index
+  methods: [GET]
+
+create_post:
+  path: /posts/create
+  controller: App\Controller\PostsController::create
+  methods: [GET]
+
+save_post:
+  path: /posts
+  controller: App\Controller\PostsController::store
+  methods: [POST]
+
+edit_post:
+  path: /posts/{id}
+  controller: App\Controller\PostsController::edit
+  methods: [GET]
+
+update_post:
+  path: /posts/{id}
+  controller: App\Controller\PostsController::update
+  methods: [POST]
+
+delete_post:
+  path: /posts/{id}
+  controller: App\Controller\PostsController::delete
+  methods: [DELETE]
+
+home:
+  path: /
+  controller: App\Controller\HomeController::index
+  methods: [GET]
+
+posts_user:
+  path: /user-posts/{id}
+  controller: App\Controller\HomeController::userPosts
+  methods: [GET]
+
+home_post:
+  path: /{slug}
+  controller: App\Controller\HomeController::displayPost
+  methods: [GET]

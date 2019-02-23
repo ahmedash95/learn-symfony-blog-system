@@ -1,0 +1,30 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Posts List!{% endblock %}
+
+{% block body %}
+
+<div class="example-wrapper">
+    <div>
+        <a href="{{ path('home') }}">Home</a>
+        |
+        <a href="#">Logout</a>
+    </div>
+    <h1>Total Posts ({{ posts|length }})</h1>
+    <a href="{{ path('create_post') }}">ADD NEW</a>
+    <ul>
+    {% for post in posts %}
+        <li style="margin: 10px 0;">
+            {{ post.title }}
+            |
+            <a href="{{ path('edit_post',{ 'id' : post.id }) }}">Edit</a>
+            <form action="{{ path('delete_post',{'id' : post.id}) }}" method="post" style="display: inline-block;">
+                <input type="hidden" name="token" value="{{ csrf_token('delete_post') }}" />
+                <input type="hidden" name="_method" value="DELETE">
+                <button style="background: red; color:white">DELETE</button>
+            </form>
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+{% endblock %}

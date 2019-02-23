@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+
+{{ form_start(form) }}
+    {{ form_row(form.username) }}
+    {{ form_row(form.email.first) }}
+    {{ form_row(form.email.second) }}
+    {{ form_row(form.password) }}
+
+<button type="submit">Register!</button>
+{{ form_end(form) }}
+
+{% endblock body %}

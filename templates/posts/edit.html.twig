@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Post!{% endblock %}
+
+{% block body %}
+
+    <div class="example-wrapper">
+        <h1>Edit post: {{ post.title }}</h1>
+        <form action="{{ path('edit_post',{id: post.id}) }}" method="post">
+            <input type="hidden" name="token" value="{{ csrf_token('update_post') }}" />
+            <div>
+                <p><label for="#">Title</label></p>
+                <input type="text" name="title" value="{{ post.title }}">
+            </div>
+            <div>
+                <p><label for="#">content</label></p>
+                <textarea type="text" name="content" rows="7" cols="90">{{ post.content }}</textarea>
+            </div>
+            <br>
+            <button>Update</button>
+        </form>
+    </div>
+{% endblock %}
