@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Post
 {
+	const cacheKey = 'p'; # post
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

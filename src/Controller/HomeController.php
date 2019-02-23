@@ -5,6 +5,9 @@ namespace App\Controller;
 use App\Entity\Post;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Cache\Adapter\AdapterInterface;
+use Symfony\Component\Cache\Adapter\RedisAdapter;
+use Symfony\Contracts\Cache\CacheInterface;
 
 class HomeController extends AbstractController
 {
@@ -17,7 +20,7 @@ class HomeController extends AbstractController
         ]);
     }
 
-    public function displayPost($slug)
+    public function displayPost(AdapterInterface $cache,$slug)
     {
         $post = $this->getDoctrine()->getRepository(Post::class)->find($slug);
 
@@ -25,8 +28,14 @@ class HomeController extends AbstractController
             return $this->redirectToRoute('home');
         }
 
+        $cacheKey = Post::cacheKey.'.'.$post->getId();
+        $views = $cache->getItem($cacheKey);
+		$views->set(intval($views->get()) + 1);
+		$cache->save($views);
+
         return $this->render('home/single.html.twig', [
             'post' => $post,
+			'views' => $views->get()
         ]);
     }
 
