@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Post;
+use App\Events\PostUpdatedEvent;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -55,7 +57,7 @@ class PostsController extends AbstractController
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request,EventDispatcherInterface $dispatcher,$id)
     {
         $submittedToken = $request->request->get('token');
         if (!$this->isCsrfTokenValid('update_post', $submittedToken)) {
@@ -70,6 +72,9 @@ class PostsController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $em->persist($post);
         $em->flush();
+
+        $event = new PostUpdatedEvent($post);
+		$dispatcher->dispatch(PostUpdatedEvent::NAME, $event);
 
         return $this->redirectToRoute('posts');
     }

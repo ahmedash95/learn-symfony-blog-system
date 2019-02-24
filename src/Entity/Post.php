@@ -9,7 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Post
 {
-	const cacheKey = 'p'; # post
+	const cacheViewsKey = 'p.views.'; # post
+	const cacheContentKey = 'p.content.'; # post
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()

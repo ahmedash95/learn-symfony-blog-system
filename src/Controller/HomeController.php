@@ -22,14 +22,22 @@ class HomeController extends AbstractController
 
     public function displayPost(AdapterInterface $cache,$slug)
     {
-        $post = $this->getDoctrine()->getRepository(Post::class)->find($slug);
+		$contentCacheKey = Post::cacheContentKey.$slug;
+		$viewsCacheKey = Post::cacheViewsKey.$slug;
 
-        if (!$post) {
-            return $this->redirectToRoute('home');
-        }
+		$post = $cache->getItem($contentCacheKey);
+		if(!$post->isHit()) {
+			$postData = $this->getDoctrine()->getRepository(Post::class)->find($slug);
+			if (!$postData) {
+				return $this->redirectToRoute('home');
+			}
+			$post->set($postData);
+			$cache->save($post);
+		}
 
-        $cacheKey = Post::cacheKey.'.'.$post->getId();
-        $views = $cache->getItem($cacheKey);
+		$post = $post->get();
+
+        $views = $cache->getItem($viewsCacheKey);
 		$views->set(intval($views->get()) + 1);
 		$cache->save($views);
 
