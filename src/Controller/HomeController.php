@@ -6,8 +6,6 @@ use App\Entity\Post;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
-use Symfony\Component\Cache\Adapter\RedisAdapter;
-use Symfony\Contracts\Cache\CacheInterface;
 
 class HomeController extends AbstractController
 {
@@ -20,30 +18,30 @@ class HomeController extends AbstractController
         ]);
     }
 
-    public function displayPost(AdapterInterface $cache,$slug)
+    public function displayPost(AdapterInterface $cache, $slug)
     {
-		$contentCacheKey = Post::cacheContentKey.$slug;
-		$viewsCacheKey = Post::cacheViewsKey.$slug;
+        $contentCacheKey = Post::cacheContentKey.$slug;
+        $viewsCacheKey = Post::cacheViewsKey.$slug;
 
-		$post = $cache->getItem($contentCacheKey);
-		if(!$post->isHit()) {
-			$postData = $this->getDoctrine()->getRepository(Post::class)->find($slug);
-			if (!$postData) {
-				return $this->redirectToRoute('home');
-			}
-			$post->set($postData);
-			$cache->save($post);
-		}
+        $post = $cache->getItem($contentCacheKey);
+        if (!$post->isHit()) {
+            $postData = $this->getDoctrine()->getRepository(Post::class)->find($slug);
+            if (!$postData) {
+                return $this->redirectToRoute('home');
+            }
+            $post->set($postData);
+            $cache->save($post);
+        }
 
-		$post = $post->get();
+        $post = $post->get();
 
         $views = $cache->getItem($viewsCacheKey);
-		$views->set(intval($views->get()) + 1);
-		$cache->save($views);
+        $views->set(intval($views->get()) + 1);
+        $cache->save($views);
 
         return $this->render('home/single.html.twig', [
             'post' => $post,
-			'views' => $views->get()
+            'views' => $views->get(),
         ]);
     }
 

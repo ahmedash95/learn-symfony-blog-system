@@ -57,7 +57,7 @@ class PostsController extends AbstractController
         ]);
     }
 
-    public function update(Request $request,EventDispatcherInterface $dispatcher,$id)
+    public function update(Request $request, EventDispatcherInterface $dispatcher, $id)
     {
         $submittedToken = $request->request->get('token');
         if (!$this->isCsrfTokenValid('update_post', $submittedToken)) {
@@ -74,7 +74,7 @@ class PostsController extends AbstractController
         $em->flush();
 
         $event = new PostUpdatedEvent($post);
-		$dispatcher->dispatch(PostUpdatedEvent::NAME, $event);
+        $dispatcher->dispatch(PostUpdatedEvent::NAME, $event);
 
         return $this->redirectToRoute('posts');
     }
